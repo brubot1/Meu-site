@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Tarefas</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  #taskInput {
+    margin-bottom: 10px;
+  }
+  li {
+   margin: 10px; 
+  }
+  
+</style>
+</head>
+<body>
+<h1>Lista de Tarefas</h1>
+<input type="text" id="taskInput" placeholder="Adicionar nova tarefa">
+<button id="addTaskButton">Adicionar Tarefa</button>
+<ul id="taskList"></ul>
+
+<script>
+  class TaskManager {
+    constructor() {
+      this.tasks = [];
+    }
+    
+    addTask(task) {
+      this.tasks.push(task);
+    }
+    
+    removeTask(taskIndex) {
+      this.tasks.splice(taskIndex, 1);
+    }
+    
+    renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+      this.tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.textContent = task;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remover';
+        removeButton.addEventListener('click', () => {
+          this.removeTask(index);
+          this.renderTasks();
+        });
+        li.appendChild(removeButton);
+        taskList.appendChild(li);
+      });
+    }
+  }
+  
+  const taskManager = new TaskManager();
+  const addTaskButton = document.getElementById('addTaskButton');
+  const taskInput = document.getElementById('taskInput');
+  
+  addTaskButton.addEventListener('click', () => {
+    const taskText = taskInput.value;
+    if (taskText.trim() !== '') {
+      taskManager.addTask(taskText);
+      taskManager.renderTasks();
+      taskInput.value = '';
+    } else {
+      alert('Por favor, insira uma tarefa válida.');
+    }
+  });
+</script>
+</body>
+</html>
